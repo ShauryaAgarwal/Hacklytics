@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Audiogram Questionnaire</title>
+    <style>
+        /* Enhanced CSS for a modern, professional look */
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+            background-color: #edf2f7;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .question input, .question select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4c51bf;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #434190;
+        }
+
+        .loading-screen, .results-display {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f7fafc;
+            border-radius: 8px;
+            display: none; /* Changed to 'display: none;' for initial state */
+        }
+
+        .results-display {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predictive Audiogram Questionnaire</h1>
+        <form id="audiogramForm">
+            <!-- Dynamically generated questions for demonstration -->
+            <!-- This section should be tailored to include the specific questions of your questionnaire -->
+            <div class="question">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" min="0" required>
+            </div>
+            <div class="question">
+                <label for="exposure">Exposure to loud noises (work, leisure, etc.):</label>
+                <select id="exposure" name="exposure" required>
+                    <option value="">Please select</option>
+                    <option value="never">Never</option>
+                    <option value="rarely">Rarely</option>
+                    <option value="sometimes">Sometimes</option>
+                    <option value="often">Often</option>
+                </select>
+            </div>
+            <!-- Placeholder for additional questions -->
+            <button type="submit" class="button">Submit</button>
+        </form>
+
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="loading-screen">
+            Processing your results, please wait...
+        </div>
+
+        <!-- Results Display -->
+        <div id="resultsDisplay" class="results-display">
+            <!-- Placeholder for results -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('audiogramForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            displayLoadingScreen(true);
+
+            // Simulated fetch request for demonstration
+            setTimeout(() => {
+                // Simulating data retrieval
+                displayResults({ result: 'Mild hearing loss detected. Consultation recommended.' });
+            }, 2000); // Simulated delay
+        });
+
+        function displayLoadingScreen(show) {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (show) {
+                loadingScreen.style.display = 'block';
+            } else {
+                loadingScreen.style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            displayLoadingScreen(false);
+            const resultsDisplay = document.getElementById('resultsDisplay');
+            resultsDisplay.innerHTML = `<strong>Result:</strong> ${data.result}`;
+            resultsDisplay.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
