@@ -11,7 +11,7 @@ class handler(BaseHTTPRequestHandler):
         # Process data here to generate audiogram
 
         # Placeholder image URL
-        image_url = "https://cdn.discordapp.com/attachments/1205691470951088199/1206234494667853844/image.png?ex=65db446a&is=65c8cf6a&hm=3c37da74d1ba751b4ac1e2918703bce7bbc6f069f597543caea600cae662fa4e&"
+        image_url = "https://cdn.discordapp.com/attachments/1205691470951088199/1206238050846515230/image_1.png?ex=65db47ba&is=65c8d2ba&hm=d5bfb22d5f10efa9bdbce5b597b5bb7894b2aa16fc71e0a1b15654e96da12a23&"
 
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
