@@ -473,10 +473,8 @@
           },
           body: JSON.stringify(responses),
         });
-        setTimeout(() => {
-          const data = await response.json();
-          displayResults(data.audiogramImageUrl);
-        }, 2000);
+        const data = await response.json();
+        displayResults(data.audiogramImageUrl);
       } catch (error) {
         console.error('Error:', error);
       } finally {
