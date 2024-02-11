@@ -45,7 +45,6 @@ scalerRight, scalerYRight = load('../models/model_with_scaler.pkl')
 scalerLeft, scalerYLeft = load('../models/model_with_scalerLeft.pkl')
 
 
-
 def generateAudiogram (ageGroupUser, genderUser, industryUser, militaryStatus, q1, q2, q3, df):
     L500 = np.array(df['L500'])
     L1k = np.array(df['L1k'])
