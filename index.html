@@ -421,7 +421,7 @@
 
   <script>
     // Audiogram questionnaire listener
-    document.getElementById('audiogramForm').addEventListener('submit', function(event) {
+    document.getElementById('audiogramForm').addEventListener('submit', async function(event) {
       event.preventDefault();
       displayLoadingScreen(true);
       
@@ -431,7 +431,8 @@
       for (const [key, value] of formData.entries()) {
         responses[key] = value;
       }
-      
+
+      /*
       // Sort age into groups
       const age = parseInt(responses.age, 10); // Ensure age is an integer
       let ageGroup = '';
@@ -441,6 +442,7 @@
       else if (age <= 55) ageGroup = 'Group 4: 46-55';
       else ageGroup = 'Group 5: 56+';
       responses.ageGroup = ageGroup; // Add the age group to the responses object
+      */
 
       /*
       // Evaluate responses to determine result
