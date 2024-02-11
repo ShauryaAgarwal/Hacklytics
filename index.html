@@ -424,12 +424,14 @@
     document.getElementById('audiogramForm').addEventListener('submit', function(event) {
       event.preventDefault();
       displayLoadingScreen(true);
+      
       // Collect form data
       const formData = new FormData(event.target);
       const responses = {};
       for (const [key, value] of formData.entries()) {
         responses[key] = value;
       }
+      
       // Sort age into groups
       const age = parseInt(responses.age, 10); // Ensure age is an integer
       let ageGroup = '';
@@ -439,6 +441,8 @@
       else if (age <= 55) ageGroup = 'Group 4: 46-55';
       else ageGroup = 'Group 5: 56+';
       responses.ageGroup = ageGroup; // Add the age group to the responses object
+
+      /*
       // Evaluate responses to determine result
       let resultMessage = evaluateResponses(responses);
       // Simulate fetch request for demonstration
@@ -448,6 +452,23 @@
           result: resultMessage
         });
       }, 2000); // Simulated delay
+      */
+
+      try {
+        const response = await fetch('/api/generate_audiogram', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.dumps(responses),
+        });
+        const data = await response.json();
+        displayResults(data.audiogramImageUrl);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        displayLoadingScreen(false);
+      }
     });
     // Hearing aid questionnaire listener
     document.getElementById('hearingAidQuestionnaire').addEventListener('submit', function(event) {
@@ -485,11 +506,19 @@
       loadingScreen.style.display = show ? 'flex' : 'none';
     }
 
+    /*
     function displayResults(data) {
       displayLoadingScreen(false);
       const resultsDisplay = document.getElementById('resultsDisplay');
       const resultText = document.getElementById('resultText');
       resultText.innerHTML = data.result;
+      resultsDisplay.hidden = false;
+    }
+    */
+
+    function displayResults(imageUrl) {
+      const resultsDisplay = document.getElementById('resultsDisplay');
+      resultsDisplay.innerHTML = `<img src="${imageUrl}" alt="Generated Audiogram"/>`;
       resultsDisplay.hidden = false;
     }
 
