@@ -436,6 +436,7 @@
       
       // Collect form data
       const formData = new FormData(event.target);
+      print(formData);
       const responses = {
         age: formData.get('age'),
         gender: formData.get('gender') === 'Male' ? 1 : 2, // Assuming 1 for Male, 2 for Female
