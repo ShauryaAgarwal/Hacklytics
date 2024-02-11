@@ -436,25 +436,22 @@
       
       // Collect form data
       const formData = new FormData(event.target);
-      const responses = {
-        age: formData.get('age'),
-        gender: formData.get('gender') === 'Male' ? 1 : 2, // Assuming 1 for Male, 2 for Female
-        military: formData.get('military') === 'Yes' ? 1 : 2, // Assuming 1 for Yes, 0 for No
-        industry: document.getElementById('industrySearch').value, // Directly use the search input for industry
-        q1: parseInt(formData.get('hearingRating'), 10),
-        q2: formData.get('workNoiseExposure') === 'Yes' ? 1 : 2, // Assuming 1 for Yes, 0 for No
-        q3: formData.get('botheringSymptoms') === 'Yes' ? 1 : 2 // Assuming 1 for Yes, 0 for No
-      };
+      const responses = {};
+      for (const [key, value] of formData.entries()) {
+        responses[key] = value;
+      }
 
+      /*
       // Sort age into groups
       const age = parseInt(responses.age, 10); // Ensure age is an integer
-      let ageGroup = 0;
-      if (age >= 18 && age <= 25) ageGroup = 1;
-      else if (age <= 35) ageGroup = 2;
-      else if (age <= 45) ageGroup = 3;
-      else if (age <= 55) ageGroup = 4;
-      else ageGroup = 5;
+      let ageGroup = '';
+      if (age >= 18 && age <= 25) ageGroup = 'Group 1: 18-25';
+      else if (age <= 35) ageGroup = 'Group 2: 26-35';
+      else if (age <= 45) ageGroup = 'Group 3: 36-45';
+      else if (age <= 55) ageGroup = 'Group 4: 46-55';
+      else ageGroup = 'Group 5: 56+';
       responses.ageGroup = ageGroup; // Add the age group to the responses object
+      */
 
       /*
       // Evaluate responses to determine result
@@ -474,29 +471,9 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            ageGroup: responses.ageGroup,
-            gender: responses.gender,
-            industry: responses.industry,
-            militaryStatus: responses.military,
-            q1: responses.q1,
-            q2: responses.q2,
-            q3: responses.q3
-          }),
+          body: JSON.stringify(responses),
         });
-
-        console.log(responses.ageGroup);
-        console.log(responses.gender);
-        console.log(responses.industry);
-        console.log(responses.military);
-        console.log(responses.q1);
-        console.log(responses.q2);
-        console.log(responses.q3);
-        
         const data = await response.json();
-
-        console.log(data);
-        
         displayResults(data.audiogramImageUrl);
       } catch (error) {
         console.error('Error:', error);
