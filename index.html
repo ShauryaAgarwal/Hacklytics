@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Predictive Audiogram Questionnaire</title>
   <style>
-    /* Enhanced CSS for a modern, professional look */
+    /* CSS designed for a modern, professional look */
     body,
     html {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -60,6 +60,27 @@
       border-radius: 5px;
       background-color: #f7fafc;
       cursor: pointer;
+    }
+
+    .dropdown-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      display: none;
+      /* Initially hidden */
+      position: absolute;
+      background-color: white;
+      width: calc(100% - 2px);
+      z-index: 1000;
+    }
+
+    .dropdown-list div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .dropdown-list div:hover {
+      background-color: #f0f0f0;
     }
 
     .button {
@@ -171,7 +192,7 @@
       <!-- Age -->
       <div class="question">
         <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="0" required>
+        <input type="number" id="age" name="age" min="18" required>
       </div>
 
       <!-- Gender -->
@@ -187,8 +208,9 @@
 
       <!-- Industry -->
       <div class="question">
-        <label for="industry">Occupational Industry:</label>
-        <input type="text" id="industry" name="industry" placeholder="e.g., Construction, Healthcare" required>
+        <label for="industrySearch">Occupational Industry:</label>
+        <input type="text" id="industrySearch" placeholder="e.g., Construction, Healthcare" autocomplete="off">
+        <div id="industryList" class="dropdown-list"></div>
       </div>
 
       <!-- 1. Self-Reported Hearing Ability -->
@@ -198,27 +220,34 @@
           <option value="">Select</option>
           <option value="1">1 - Excellent</option>
           <option value="2">2 - Good</option>
-          <option value="3">3 - Fair</option>
-          <option value="4">4 - Slightly Poor</option>
-          <option value="5">5 - Poor</option>
-          <option value="6">6 - Very Poor</option>
+          <option value="3">3 - A little trouble</option>
+          <option value="4">4 - Moderate hearing trouble</option>
+          <option value="5">5 - A lot of trouble</option>
+          <option value="6">6 - Deaf</option>
         </select>
       </div>
 
       <!-- 2. Exposure to Loud Noises at Work -->
       <div class="question">
-        <label for="workNoiseExposure">How many hours per week are you exposed to loud noises at your workplace?</label>
+        <label for="workNoiseExposure">Have you ever had a job where you were exposed to loud noise (you would have to speak in a raised voice to be heard) for five or more hours a week?</label>
         <select id="workNoiseExposure" name="workNoiseExposure" required>
           <option value="">Select</option>
-          <option value="0">0 hours</option>
-          <option value="1-5">1-5 hours</option>
-          <option value="6-10">6-10 hours</option>
-          <option value="11-20">11-20 hours</option>
-          <option value="21+">More than 20 hours</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
         </select>
       </div>
 
-      <!-- 3. Recreational Noise Exposure -->
+      <!-- 3. Difficulty Understanding Speech in Noisy Environments -->
+      <div class="question">
+        <label for="botheringSymptoms">In the past 12 months, have you been bothered by ringing, roaring, or buzzing in your ears or head?</label>
+        <select id="botheringSymptoms" name="botheringSymptoms" required>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <!-- 4. Recreational Noise Exposure -->
       <div class="question">
         <label for="headphoneUse">How frequently do you use headphones at a high volume for music, videos, or gaming?</label>
         <select id="headphoneUse" name="headphoneUse" required>
@@ -231,7 +260,7 @@
         </select>
       </div>
 
-      <!-- 4. History of Ear Infections -->
+      <!-- 5. History of Ear Infections -->
       <div class="question">
         <label for="earInfections">How many times have you had ear infections in the past 2 years?</label>
         <select id="earInfections" name="earInfections" required>
@@ -244,7 +273,7 @@
         </select>
       </div>
 
-      <!-- 5. Use of Hearing Protection in Noisy Environments -->
+      <!-- 6. Use of Hearing Protection in Noisy Environments -->
       <div class="question">
         <label for="hearingProtection">When exposed to loud environments (e.g., concerts, factories), how often do you use hearing protection?</label>
         <select id="hearingProtection" name="hearingProtection" required>
@@ -257,7 +286,7 @@
         </select>
       </div>
 
-      <!-- 6. Hearing Aid or Cochlear Implant Usage -->
+      <!-- 7. Hearing Aid or Cochlear Implant Usage -->
       <div class="question">
         <label for="hearingAidUse">Do you currently use a hearing aid or cochlear implant in one or both ears?</label>
         <select id="hearingAidUse" name="hearingAidUse" required>
@@ -269,7 +298,7 @@
         </select>
       </div>
 
-      <!-- 7. Family History of Hearing Loss -->
+      <!-- 8. Family History of Hearing Loss -->
       <div class="question">
         <label for="familyHearing">Do you have any immediate family members (parents, siblings) with diagnosed hearing loss?</label>
         <select id="familyHearing" name="familyHearing" required>
@@ -281,7 +310,7 @@
         </select>
       </div>
 
-      <!-- 8. Symptoms of Hearing Loss -->
+      <!-- 9. Symptoms of Hearing Loss -->
       <div class="question">
         <label for="tinnitusStatus">How often do you experience tinnitus (ringing or buzzing in the ears)?</label>
         <select id="tinnitusStatus" name="tinnitusStatus" required>
@@ -289,19 +318,6 @@
           <option value="Constantly">Constantly</option>
           <option value="Frequently">Frequently</option>
           <option value="Occasionally">Occasionally</option>
-          <option value="Rarely">Rarely</option>
-          <option value="Never">Never</option>
-        </select>
-      </div>
-
-      <!-- 9. Difficulty Understanding Speech in Noisy Environments -->
-      <div class="question">
-        <label for="noisySituations">In noisy situations, how often do you find it difficult to understand what people are saying?</label>
-        <select id="noisySituations" name="noisySituations" required>
-          <option value="">Select</option>
-          <option value="Always">Always</option>
-          <option value="Often">Often</option>
-          <option value="Sometimes">Sometimes</option>
           <option value="Rarely">Rarely</option>
           <option value="Never">Never</option>
         </select>
@@ -396,12 +412,6 @@
       <button type="submit" class="button">Submit</button>
     </form>
 
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen" hidden>
-      <div class="loader"></div>
-      Processing your results, please wait...
-    </div>
-
     <!-- Recommendation Display -->
     <div id="recommendationResult" class="recommendationResult" hidden>
       <h2>Results</h2>
@@ -410,6 +420,7 @@
   </div>
 
   <script>
+    // Audiogram questionnaire listener
     document.getElementById('audiogramForm').addEventListener('submit', function(event) {
       event.preventDefault();
       displayLoadingScreen(true);
@@ -419,6 +430,15 @@
       for (const [key, value] of formData.entries()) {
         responses[key] = value;
       }
+      // Sort age into groups
+      const age = parseInt(responses.age, 10); // Ensure age is an integer
+      let ageGroup = '';
+      if (age >= 18 && age <= 25) ageGroup = 'Group 1: 18-25';
+      else if (age <= 35) ageGroup = 'Group 2: 26-35';
+      else if (age <= 45) ageGroup = 'Group 3: 36-45';
+      else if (age <= 55) ageGroup = 'Group 4: 46-55';
+      else ageGroup = 'Group 5: 56+';
+      responses.ageGroup = ageGroup; // Add the age group to the responses object
       // Evaluate responses to determine result
       let resultMessage = evaluateResponses(responses);
       // Simulate fetch request for demonstration
@@ -429,9 +449,9 @@
         });
       }, 2000); // Simulated delay
     });
+    // Hearing aid questionnaire listener
     document.getElementById('hearingAidQuestionnaire').addEventListener('submit', function(event) {
       event.preventDefault();
-      displayLoadingScreen(true);
       // Collect form data
       const formData = new FormData(event.target);
       const environment = formData.get('primaryEnvironment');
@@ -447,11 +467,7 @@
         comfortPreference,
         budget
       });
-      // Simulate fetch request for demonstration
-      setTimeout(() => {
-        // Display results after simulated data retrieval
-        displayRecommendation(recommendation);
-      }, 2000); // Simulated delay
+      displayRecommendation(recommendation);
     });
 
     function evaluateResponses(responses) {
@@ -478,7 +494,6 @@
     }
 
     function displayRecommendation(recommendation) {
-      displayLoadingScreen(false);
       const recommendationDisplay = document.getElementById('recommendationResult');
       const recommendationText = document.getElementById('recommendationText');
       recommendationText.innerHTML = recommendation;
@@ -552,7 +567,7 @@
         if (attributes.techCompatibility.includes(responses.techCompatibility)) score += 2;
         // Type preference scoring
         if ((responses.comfortPreference === "ITE" && attributes.type === "Earbud") ||
-          (responses.comfortPreference === "BTE" && attributes.type === "BTE") ||
+          (responses.comfortPreference === "BTE" && (attributes.type === "BTE" || attributes.type === "RIC")) ||
           (responses.comfortPreference === "Open to suggestions" && score > 0)) score += 1;
         if (score > maxScore) {
           maxScore = score;
@@ -563,6 +578,766 @@
       let recommendationReasons = `Based on your preferences for budget, technology compatibility, and physical comfort, we recommend the ${bestMatch}.`;
       return recommendationReasons;
     }
+    // Industry list dropdown handler
+    document.addEventListener('DOMContentLoaded', function() {
+      const industryOptions = [
+        "Other/Not Listed",
+        "Abrasive Product Manufacturing",
+        "Adhesive Manufacturing",
+        "Administration of Air and Water Resource and Solid Waste Management Programs",
+        "Administration of Conservation Programs",
+        "Administration of Education Programs",
+        "Administration of General Economic Programs",
+        "Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)",
+        "Administration of Public Health Programs",
+        "Administration of Urban Planning and Community and Rural Development",
+        "Administrative Management and General Management Consulting Services",
+        "Air Purification Equipment Manufacturing",
+        "Air-Conditioning and Warm Air Heating Equipment and Commercial and Industrial Refrigeration Equipment Manufacturing",
+        "Aircraft Engine and Engine Parts Manufacturing",
+        "Aircraft Manufacturing",
+        "Airport Operations",
+        "Alkalies and Chlorine Manufacturing",
+        "All Other Amusement and Recreation Industries",
+        "All Other Automotive Repair and Maintenance",
+        "All Other Basic Inorganic Chemical Manufacturing",
+        "All Other Basic Organic Chemical Manufacturing",
+        "All Other Business Support Services",
+        "All Other Converted Paper Product Manufacturing",
+        "All Other Cut and Sew Apparel Manufacturing",
+        "All Other General Merchandise Stores",
+        "All Other General Purpose Machinery Manufacturing",
+        "All Other Health and Personal Care Stores",
+        "All Other Industrial Machinery Manufacturing",
+        "All Other Miscellaneous Ambulatory Health Care Services",
+        "All Other Miscellaneous Chemical Product and Preparation Manufacturing",
+        "All Other Miscellaneous Crop Farming",
+        "All Other Miscellaneous Electrical Equipment and Component Manufacturing",
+        "All Other Miscellaneous Fabricated Metal Product Manufacturing",
+        "All Other Miscellaneous Food Manufacturing",
+        "All Other Miscellaneous General Purpose Machinery Manufacturing",
+        "All Other Miscellaneous Manufacturing",
+        "All Other Miscellaneous Nonmetallic Mineral Product Manufacturing",
+        "All Other Miscellaneous Schools and Instruction",
+        "All Other Miscellaneous Store Retailers (except Tobacco Stores)",
+        "All Other Miscellaneous Textile Product Mills",
+        "All Other Miscellaneous Wood Product Manufacturing",
+        "All Other Motor Vehicle Parts Manufacturing",
+        "All Other Nonmetallic Mineral Mining",
+        "All Other Petroleum and Coal Products Manufacturing",
+        "All Other Pipeline Transportation",
+        "All Other Plastics Product Manufacturing",
+        "All Other Professional, Scientific, and Technical Services",
+        "All Other Publishers",
+        "All Other Rubber Product Manufacturing",
+        "All Other Specialty Food Stores",
+        "All Other Specialty Trade Contractors",
+        "All Other Support Activities for Transportation",
+        "All Other Support Services",
+        "All Other Telecommunications",
+        "All Other Transit and Ground Passenger Transportation",
+        "All Other Transportation Equipment Manufacturing",
+        "Aluminum Die-Casting Foundries",
+        "Aluminum Extruded Product Manufacturing",
+        "Aluminum Foundries (except Die-Casting)",
+        "Aluminum Sheet, Plate, and Foil Manufacturing",
+        "Ambulance Services",
+        "Ammunition (except Small Arms) Manufacturing",
+        "Analytical Laboratory Instrument Manufacturing",
+        "Animal (except Poultry) Slaughtering",
+        "Animal Food Manufacturing",
+        "Animal Slaughtering and Processing",
+        "Appliance Repair and Maintenance",
+        "Asphalt Paving Mixture and Block Manufacturing",
+        "Asphalt Shingle and Coating Materials Manufacturing",
+        "Audio and Video Equipment Manufacturing",
+        "Automatic Environmental Control Manufacturing for Residential, Commercial, and Appliance Use",
+        "Automatic Vending Machine Manufacturing",
+        "Automobile Manufacturing",
+        "Automobile and Other Motor Vehicle Merchant Wholesalers",
+        "Automotive Body, Paint, and Interior Repair and Maintenance",
+        "Automotive Exhaust System Repair",
+        "Automotive Parts and Accessories Stores",
+        "Ball and Roller Bearing Manufacturing",
+        "Beauty Salons",
+        "Beet Sugar Manufacturing",
+        "Beverage and Tobacco Product Manufacturing",
+        "Bituminous Coal and Lignite Surface Mining",
+        "Blankbook, Looseleaf Binders, and Devices Manufacturing",
+        "Blind and Shade Manufacturing",
+        "Blood and Organ Banks",
+        "Boat Building",
+        "Boat Dealers",
+        "Bolt, Nut, Screw, Rivet, and Washer Manufacturing",
+        "Book Publishers",
+        "Books Printing",
+        "Bottled Water Manufacturing",
+        "Breakfast Cereal Manufacturing",
+        "Breweries",
+        "Brick and Structural Clay Tile Manufacturing",
+        "Brick, Stone, and Related Construction Material Merchant Wholesalers",
+        "Broadwoven Fabric Mills",
+        "Broom, Brush, and Mop Manufacturing",
+        "Building Inspection Services",
+        "Burial Casket Manufacturing",
+        "Bus and Other Motor Vehicle Transit Systems",
+        "Business Associations",
+        "Cable and Other Subscription Programming",
+        "Cane Sugar Refining",
+        "Car Washes",
+        "Carbon and Graphite Product Manufacturing",
+        "Carburetor, Piston, Piston Ring, and Valve Manufacturing",
+        "Carpet and Rug Mills",
+        "Carpet and Upholstery Cleaning Services",
+        "Caterers",
+        "Cement Manufacturing",
+        "Ceramic Wall and Floor Tile Manufacturing",
+        "Cheese Manufacturing",
+        "Chicken Egg Production",
+        "Child Day Care Services",
+        "Chocolate and Confectionery Manufacturing from Cacao Beans",
+        "Civic and Social Organizations",
+        "Clothing Accessories Stores",
+        "Coal and Other Mineral and Ore Merchant Wholesalers",
+        "Coastal and Great Lakes Freight Transportation",
+        "Coated Paper Bag and Pouch Manufacturing",
+        "Coated and Laminated Packaging Paper Manufacturing",
+        "Coated and Laminated Paper Manufacturing",
+        "Coffee and Tea Manufacturing",
+        "Coin-Operated Laundries and Drycleaners",
+        "Colleges, Universities, and Professional Schools",
+        "Commercial Bakeries",
+        "Commercial Gravure Printing",
+        "Commercial Lithographic Printing",
+        "Commercial Screen Printing",
+        "Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance",
+        "Commercial and Institutional Building Construction",
+        "Commercial, Industrial, and Institutional Electric Lighting Fixture Manufacturing",
+        "Commodity Contracts Dealing",
+        "Computer Facilities Management Services",
+        "Computer Systems Design Services",
+        "Computer and Computer Peripheral Equipment and Software Merchant Wholesalers",
+        "Computer and Software Stores",
+        "Concrete Block and Brick Manufacturing",
+        "Concrete Pipe Manufacturing",
+        "Confectionery Manufacturing from Purchased Chocolate",
+        "Confectionery Merchant Wholesalers",
+        "Construction",
+        "Construction Machinery Manufacturing",
+        "Construction Sand and Gravel Mining",
+        "Construction and Mining (except Oil Well) Machinery and Equipment Merchant Wholesalers",
+        "Construction, Mining, and Forestry Machinery and Equipment Rental and Leasing",
+        "Convenience Stores",
+        "Conveyor and Conveying Equipment Manufacturing",
+        "Copper Foundries (except Die-Casting)",
+        "Copper Rolling, Drawing, and Extruding",
+        "Copper Wire (except Mechanical) Drawing",
+        "Correctional Institutions",
+        "Corrugated and Solid Fiber Box Manufacturing",
+        "Couriers and Express Delivery Services",
+        "Courts",
+        "Creamery Butter Manufacturing",
+        "Credit Bureaus",
+        "Credit Unions",
+        "Crushed and Broken Granite Mining and Quarrying",
+        "Crushed and Broken Limestone Mining and Quarrying",
+        "Current-Carrying Wiring Device Manufacturing",
+        "Custom Architectural Woodwork and Millwork Manufacturing",
+        "Custom Compounding of Purchased Resins",
+        "Custom Computer Programming Services",
+        "Cut Stock, Resawing Lumber, and Planing",
+        "Cut Stone and Stone Product Manufacturing",
+        "Cutlery and Flatware (except Precious) Manufacturing",
+        "Cutting Tool and Machine Tool Accessory Manufacturing",
+        "Cyclic Crude and Intermediate Manufacturing",
+        "Dairy Cattle and Milk Production",
+        "Dairy Product (except Dried or Canned) Merchant Wholesalers",
+        "Deep Sea Freight Transportation",
+        "Die-Cut Paper and Paperboard Office Supplies Manufacturing",
+        "Digital Printing",
+        "Dimension Stone Mining and Quarrying",
+        "Direct Health and Medical Insurance Carriers",
+        "Direct Mail Advertising",
+        "Direct Title Insurance Carriers",
+        "Distilleries",
+        "Dog and Cat Food Manufacturing",
+        "Dried and Dehydrated Food Manufacturing",
+        "Drilling Oil and Gas Wells",
+        "Drugs and Druggists' Sundries Merchant Wholesalers",
+        "Dry, Condensed, and Evaporated Dairy Product Manufacturing",
+        "Drycleaning and Laundry Services (except Coin-Operated)",
+        "Electric Bulk Power Transmission and Control",
+        "Electric Housewares and Household Fan Manufacturing",
+        "Electric Lamp Bulb and Part Manufacturing",
+        "Electric Power Distribution",
+        "Electric Power Generation, Transmission and Distribution",
+        "Electric Power Transmission, Control, and Distribution",
+        "Electrical Apparatus and Equipment, Wiring Supplies, and Related Equipment Merchant Wholesalers",
+        "Electrical Contractors and Other Wiring Installation Contractors",
+        "Electrical Equipment, Appliance, and Component Manufacturing",
+        "Electromedical and Electrotherapeutic Apparatus Manufacturing",
+        "Electronic Capacitor Manufacturing",
+        "Electronic Connector Manufacturing",
+        "Electronic Shopping and Mail-Order Houses",
+        "Electroplating, Plating, Polishing, Anodizing, and Coloring",
+        "Elementary and Secondary Schools",
+        "Elevator and Moving Stairway Manufacturing",
+        "Emergency and Other Relief Services",
+        "Employment Placement Agencies",
+        "Employment Placement Agencies and Executive Search Services",
+        "Engineered Wood Member (except Truss) Manufacturing",
+        "Engineering Services",
+        "Envelope Manufacturing",
+        "Environmental Consulting Services",
+        "Ethyl Alcohol Manufacturing",
+        "Executive Offices",
+        "Executive and Legislative Offices, Combined",
+        "Explosives Manufacturing",
+        "Fabric Coating Mills",
+        "Fabricated Pipe and Pipe Fitting Manufacturing",
+        "Fabricated Structural Metal Manufacturing",
+        "Facilities Support Services",
+        "Farm Machinery and Equipment Manufacturing",
+        "Farm Product Warehousing and Storage",
+        "Farm Supplies Merchant Wholesalers",
+        "Fastener, Button, Needle, and Pin Manufacturing",
+        "Fats and Oils Refining and Blending",
+        "Fertilizer (Mixing Only) Manufacturing",
+        "Fiber Can, Tube, Drum, and Similar Products Manufacturing",
+        "Fiber Optic Cable Manufacturing",
+        "Finfish Farming and Fish Hatcheries",
+        "Finfish Fishing",
+        "Finish Carpentry Contractors",
+        "Fire Protection",
+        "Fish and Seafood Markets",
+        "Fish and Seafood Merchant Wholesalers",
+        "Fitness and Recreational Sports Centers",
+        "Flat Glass Manufacturing",
+        "Flavoring Syrup and Concentrate Manufacturing",
+        "Floor Covering Stores",
+        "Floriculture Production",
+        "Florists",
+        "Flour Milling",
+        "Flour Mixes and Dough Manufacturing from Purchased Flour",
+        "Flower, Nursery Stock, and Florists' Supplies Merchant Wholesalers",
+        "Fluid Milk Manufacturing",
+        "Fluid Power Cylinder and Actuator Manufacturing",
+        "Fluid Power Pump and Motor Manufacturing",
+        "Fluid Power Valve and Hose Fitting Manufacturing",
+        "Folding Paperboard Box Manufacturing",
+        "Food Product Machinery Manufacturing",
+        "Forest Nurseries and Gathering of Forest Products",
+        "Fossil Fuel Electric Power Generation",
+        "Framing Contractors",
+        "Freight Transportation Arrangement",
+        "Fresh Fruit and Vegetable Merchant Wholesalers",
+        "Fresh and Frozen Seafood Processing",
+        "Frozen Cakes, Pies, and Other Pastries Manufacturing",
+        "Frozen Fruit, Juice, and Vegetable Manufacturing",
+        "Frozen Specialty Food Manufacturing",
+        "Fruit and Vegetable Canning",
+        "Fruit and Vegetable Markets",
+        "Full-Service Restaurants",
+        "Funeral Homes and Funeral Services",
+        "Furniture Merchant Wholesalers",
+        "Furniture Stores",
+        "Game, Toy, and Children's Vehicle Manufacturing",
+        "Gasket, Packing, and Sealing Device Manufacturing",
+        "Gasoline Engine and Engine Parts Manufacturing",
+        "General Automotive Repair",
+        "General Freight Trucking, Local",
+        "General Freight Trucking, Long-Distance, Truckload",
+        "General Line Grocery Merchant Wholesalers",
+        "General Medical and Surgical Hospitals",
+        "General Warehousing and Storage",
+        "Gift, Novelty, and Souvenir Stores",
+        "Glass Container Manufacturing",
+        "Glass Product Manufacturing Made of Purchased Glass",
+        "Gold Ore Mining",
+        "Golf Courses and Country Clubs",
+        "Grain and Field Bean Merchant Wholesalers",
+        "Graphic Design Services",
+        "Ground or Treated Mineral and Earth Manufacturing",
+        "Guided Missile and Space Vehicle Manufacturing",
+        "Guided Missile and Space Vehicle Propulsion Unit and Propulsion Unit Parts Manufacturing",
+        "Gypsum Product Manufacturing",
+        "HMO Medical Centers",
+        "Hand and Edge Tool Manufacturing",
+        "Hardware Manufacturing",
+        "Hardware Merchant Wholesalers",
+        "Hardware Stores",
+        "Hardwood Veneer and Plywood Manufacturing",
+        "Hat, Cap, and Millinery Manufacturing",
+        "Hazardous Waste Treatment and Disposal",
+        "Heating Equipment (except Warm Air Furnaces) Manufacturing",
+        "Heavy Duty Truck Manufacturing",
+        "Highway, Street, and Bridge Construction",
+        "Hobby, Toy, and Game Stores",
+        "Hog and Pig Farming",
+        "Home Centers",
+        "Home Furnishing Merchant Wholesalers",
+        "Hotels (except Casino Hotels) and Motels",
+        "Household Appliance Stores",
+        "Household Cooking Appliance Manufacturing",
+        "Household Furniture (except Wood and Metal) Manufacturing",
+        "Household Laundry Equipment Manufacturing",
+        "Household Refrigerator and Home Freezer Manufacturing",
+        "Household and Institutional Furniture and Kitchen Cabinet Manufacturing",
+        "Human Resources Consulting Services",
+        "Hunting and Trapping",
+        "Ice Cream and Frozen Dessert Manufacturing",
+        "Ice Manufacturing",
+        "Independent Artists, Writers, and Performers",
+        "Industrial Building Construction",
+        "Industrial Gas Manufacturing",
+        "Industrial Launderers",
+        "Industrial Machinery and Equipment Merchant Wholesalers",
+        "Industrial Mold Manufacturing",
+        "Industrial Pattern Manufacturing",
+        "Industrial Process Furnace and Oven Manufacturing",
+        "Industrial Sand Mining",
+        "Industrial Supplies Merchant Wholesalers",
+        "Industrial Truck, Tractor, Trailer, and Stacker Machinery Manufacturing",
+        "Industrial Valve Manufacturing",
+        "Industrial and Commercial Fan and Blower Manufacturing",
+        "Industrial and Personal Service Paper Merchant Wholesalers",
+        "Information",
+        "Inorganic Dye and Pigment Manufacturing",
+        "Institutional Furniture Manufacturing",
+        "Instrument Manufacturing for Measuring and Testing Electricity and Electrical Signals",
+        "Instruments and Related Products Manufacturing for Measuring, Displaying, and Controlling Industrial Process Variables",
+        "Insurance Agencies and Brokerages",
+        "Iron Foundries",
+        "Iron Ore Mining",
+        "Iron and Steel Forging",
+        "Iron and Steel Mills",
+        "Iron and Steel Pipe and Tube Manufacturing from Purchased Steel",
+        "Janitorial Services",
+        "Jewelry (except Costume) Manufacturing",
+        "Junior Colleges",
+        "Labor Unions and Similar Labor Organizations",
+        "Laminated Plastics Plate, Sheet (except Packaging), and Shape Manufacturing",
+        "Land Subdivision",
+        "Landscape Architectural Services",
+        "Landscaping Services",
+        "Lawn and Garden Tractor and Home Lawn and Garden Equipment Manufacturing",
+        "Leather and Hide Tanning and Finishing",
+        "Legislative Bodies",
+        "Lessors of Nonresidential Buildings (except Miniwarehouses)",
+        "Light Truck and Utility Vehicle Manufacturing",
+        "Lime Manufacturing",
+        "Limited-Service Restaurants",
+        "Line-Haul Railroads",
+        "Linen Supply",
+        "Local Messengers and Local Delivery",
+        "Logging",
+        "Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers",
+        "Machine Shops",
+        "Machine Tool (Metal Cutting Types) Manufacturing",
+        "Machine Tool (Metal Forming Types) Manufacturing",
+        "Magnetic and Optical Recording Media Manufacturing",
+        "Mail-Order Houses",
+        "Malt Manufacturing",
+        "Manifold Business Forms Printing",
+        "Manufactured (Mobile) Home Dealers",
+        "Manufactured Home (Mobile Home) Manufacturing",
+        "Marinas",
+        "Marine Cargo Handling",
+        "Marketing Consulting Services",
+        "Marketing Research and Public Opinion Polling",
+        "Marking Device Manufacturing",
+        "Masonry Contractors",
+        "Materials Recovery Facilities",
+        "Mattress Manufacturing",
+        "Mayonnaise, Dressing, and Other Prepared Sauce Manufacturing",
+        "Meat Processed from Carcasses",
+        "Meat and Meat Product Merchant Wholesalers",
+        "Mechanical Power Transmission Equipment Manufacturing",
+        "Media Representatives",
+        "Medical Laboratories",
+        "Medical, Dental, and Hospital Equipment and Supplies Merchant Wholesalers",
+        "Men's Clothing Stores",
+        "Men's Footwear (except Athletic) Manufacturing",
+        "Men's and Boys' Cut and Sew Work Clothing Manufacturing",
+        "Metal Can Manufacturing",
+        "Metal Coating, Engraving (except Jewelry and Silverware), and Allied Services to Manufacturers",
+        "Metal Heat Treating",
+        "Metal Household Furniture Manufacturing",
+        "Metal Service Centers and Other Metal Merchant Wholesalers",
+        "Metal Stamping",
+        "Metal Tank (Heavy Gauge) Manufacturing",
+        "Metal Window and Door Manufacturing",
+        "Military Armored Vehicle, Tank, and Tank Component Manufacturing",
+        "Mining Machinery and Equipment Manufacturing",
+        "Mixed Mode Transit Systems",
+        "Motion Picture and Video Production",
+        "Motor Home Manufacturing",
+        "Motor Vehicle Body Manufacturing",
+        "Motor Vehicle Brake System Manufacturing",
+        "Motor Vehicle Metal Stamping",
+        "Motor Vehicle Parts (Used) Merchant Wholesalers",
+        "Motor Vehicle Seating and Interior Trim Manufacturing",
+        "Motor Vehicle Steering and Suspension Components (except Spring) Manufacturing",
+        "Motor Vehicle Supplies and New Parts Merchant Wholesalers",
+        "Motor Vehicle Towing",
+        "Motor Vehicle Transmission and Power Train Parts Manufacturing",
+        "Motor and Generator Manufacturing",
+        "Motorcycle, ATV, and Personal Watercraft Dealers",
+        "Motorcycle, Bicycle, and Parts Manufacturing",
+        "Museums",
+        "Musical Groups and Artists",
+        "Musical Instrument Manufacturing",
+        "Narrow Fabric Mills",
+        "National Security",
+        "Natural Gas Distribution",
+        "Natural Gas Liquid Extraction",
+        "Nature Parks and Other Similar Institutions",
+        "Navigational Services to Shipping",
+        "New Car Dealers",
+        "New Single-Family Housing Construction (except Operative Builders)",
+        "News Dealers and Newsstands",
+        "Newspaper Publishers",
+        "Newsprint Mills",
+        "Nitrogenous Fertilizer Manufacturing",
+        "Nonchocolate Confectionery Manufacturing",
+        "Nonclay Refractory Manufacturing",
+        "Noncurrent-Carrying Wiring Device Manufacturing",
+        "Nonferrous (except Aluminum) Die-Casting Foundries",
+        "Nonferrous Forging",
+        "Nonferrous Metal (except Copper and Aluminum) Rolling, Drawing, and Extruding",
+        "Nonfolding Sanitary Food Container Manufacturing",
+        "Nonresidential Property Managers",
+        "Nonscheduled Chartered Freight Air Transportation",
+        "Nonscheduled Chartered Passenger Air Transportation",
+        "Nonupholstered Wood Household Furniture Manufacturing",
+        "Nursery, Garden Center, and Farm Supply Stores",
+        "Office Administrative Services",
+        "Office Furniture (except Wood) Manufacturing",
+        "Office Machinery Manufacturing",
+        "Offices of All Other Miscellaneous Health Practitioners",
+        "Offices of Chiropractors",
+        "Offices of Lawyers",
+        "Offices of Other Holding Companies",
+        "Offices of Physicians (except Mental Health Specialists)",
+        "Offices of Real Estate Agents and Brokers",
+        "Oil and Gas Pipeline and Related Structures Construction",
+        "Open-End Investment Funds",
+        "Ornamental and Architectural Metal Work Manufacturing",
+        "Other Activities Related to Real Estate",
+        "Other Aircraft Parts and Auxiliary Equipment Manufacturing",
+        "Other Airport Operations",
+        "Other Aluminum Rolling and Drawing",
+        "Other Animal Food Manufacturing",
+        "Other Automotive Mechanical and Electrical Repair and Maintenance",
+        "Other Building Equipment Contractors",
+        "Other Building Finishing Contractors",
+        "Other Building Material Dealers",
+        "Other Business Service Centers (including Copy Shops)",
+        "Other Clothing Stores",
+        "Other Commercial Printing",
+        "Other Commercial and Industrial Machinery and Equipment Rental and Leasing",
+        "Other Commercial and Service Industry Machinery Manufacturing",
+        "Other Communication and Energy Wire Manufacturing",
+        "Other Communications Equipment Manufacturing",
+        "Other Computer Peripheral Equipment Manufacturing",
+        "Other Concrete Product Manufacturing",
+        "Other Construction Material Merchant Wholesalers",
+        "Other Crushed and Broken Stone Mining and Quarrying",
+        "Other Direct Selling Establishments",
+        "Other Electric Power Generation",
+        "Other Electronic Component Manufacturing",
+        "Other Electronic Parts and Equipment Merchant Wholesalers",
+        "Other Electronic and Precision Equipment Repair and Maintenance",
+        "Other Engine Equipment Manufacturing",
+        "Other Fabricated Wire Product Manufacturing",
+        "Other Farm Product Raw Material Merchant Wholesalers",
+        "Other Foundation, Structure, and Building Exterior Contractors",
+        "Other Fuel Dealers",
+        "Other Gasoline Stations",
+        "Other General Government Support",
+        "Other Grocery and Related Products Merchant Wholesalers",
+        "Other Heavy and Civil Engineering Construction",
+        "Other Hosiery and Sock Mills",
+        "Other Household Textile Product Mills",
+        "Other Individual and Family Services",
+        "Other Justice, Public Order, and Safety Activities",
+        "Other Lighting Equipment Manufacturing",
+        "Other Management Consulting Services",
+        "Other Measuring and Controlling Device Manufacturing",
+        "Other Metal Container Manufacturing",
+        "Other Metal Valve and Pipe Fitting Manufacturing",
+        "Other Metalworking Machinery Manufacturing",
+        "Other Millwork (including Flooring)",
+        "Other Miscellaneous Durable Goods Merchant Wholesalers",
+        "Other Miscellaneous Nondurable Goods Merchant Wholesalers",
+        "Other Motor Vehicle Electrical and Electronic Equipment Manufacturing",
+        "Other Nonferrous Foundries (except Die-Casting)",
+        "Other Nonhazardous Waste Treatment and Disposal",
+        "Other Nonscheduled Air Transportation",
+        "Other Ordnance and Accessories Manufacturing",
+        "Other Personal and Household Goods Repair and Maintenance",
+        "Other Poultry Production",
+        "Other Pressed and Blown Glass and Glassware Manufacturing",
+        "Other Scientific and Technical Consulting Services",
+        "Other Services Related to Advertising",
+        "Other Services to Buildings and Dwellings",
+        "Other Similar Organizations (except Business, Professional, Labor, and Political Organizations)",
+        "Other Snack Food Manufacturing",
+        "Other Social Advocacy Organizations",
+        "Other Specialized Design Services",
+        "Other Support Activities for Air Transportation",
+        "Other Support Activities for Road Transportation",
+        "Other Vegetable (except Potato) and Melon Farming",
+        "Other Warehousing and Storage",
+        "Other Waste Collection",
+        "Outdoor Power Equipment Stores",
+        "Outerwear Knitting Mills",
+        "Overhead Traveling Crane, Hoist, and Monorail System Manufacturing",
+        "Packaged Frozen Food Merchant Wholesalers",
+        "Packaging Machinery Manufacturing",
+        "Packaging and Labeling Services",
+        "Packing and Crating",
+        "Paint and Coating Manufacturing",
+        "Paint and Wallpaper Stores",
+        "Paint, Varnish, and Supplies Merchant Wholesalers",
+        "Painting and Wall Covering Contractors",
+        "Paper (except Newsprint) Mills",
+        "Paperboard Mills",
+        "Parking Lots and Garages",
+        "Periodical Publishers",
+        "Pesticide and Other Agricultural Chemical Manufacturing",
+        "Pet Care (except Veterinary) Services",
+        "Petrochemical Manufacturing",
+        "Petroleum Lubricating Oil and Grease Manufacturing",
+        "Petroleum Refineries",
+        "Pharmaceutical Preparation Manufacturing",
+        "Pharmacies and Drug Stores",
+        "Photofinishing Laboratories (except One-Hour)",
+        "Photographic and Photocopying Equipment Manufacturing",
+        "Pipeline Transportation of Natural Gas",
+        "Plastics Bag and Pouch Manufacturing",
+        "Plastics Bottle Manufacturing",
+        "Plastics Material and Resin Manufacturing",
+        "Plastics Materials and Basic Forms and Shapes Merchant Wholesalers",
+        "Plastics Packaging Film and Sheet (including Laminated) Manufacturing",
+        "Plastics Packaging Materials and Unlaminated Film and Sheet Manufacturing",
+        "Plastics Pipe and Pipe Fitting Manufacturing",
+        "Plastics Plumbing Fixture Manufacturing",
+        "Plastics and Rubber Industry Machinery Manufacturing",
+        "Plate Work Manufacturing",
+        "Plumbing Fixture Fitting and Trim Manufacturing",
+        "Plumbing and Heating Equipment and Supplies (Hydronics) Merchant Wholesalers",
+        "Plumbing, Heating, and Air-Conditioning Contractors",
+        "Police Protection",
+        "Polish and Other Sanitation Good Manufacturing",
+        "Polystyrene Foam Product Manufacturing",
+        "Porcelain Electrical Supply Manufacturing",
+        "Port and Harbor Operations",
+        "Postal Service",
+        "Postharvest Crop Activities (except Cotton Ginning)",
+        "Poultry Hatcheries",
+        "Poultry Processing",
+        "Poultry and Poultry Product Merchant Wholesalers",
+        "Poured Concrete Foundation and Structure Contractors",
+        "Power Boiler and Heat Exchanger Manufacturing",
+        "Power and Communication Line and Related Structures Construction",
+        "Power, Distribution, and Specialty Transformer Manufacturing",
+        "Precision Turned Product Manufacturing",
+        "Prefabricated Metal Building and Component Manufacturing",
+        "Prefabricated Wood Building Manufacturing",
+        "Prepress Services",
+        "Prerecorded Compact Disc (except Software), Tape, and Record Reproducing",
+        "Prerecorded Tape, Compact Disc, and Record Stores",
+        "Primary Aluminum Production",
+        "Primary Smelting and Refining of Copper",
+        "Primary Smelting and Refining of Nonferrous Metal (except Copper and Aluminum)",
+        "Printed Circuit Assembly (Electronic Assembly) Manufacturing",
+        "Printing",
+        "Printing Ink Manufacturing",
+        "Printing Machinery and Equipment Manufacturing",
+        "Promoters of Performing Arts, Sports, and Similar Events without Facilities",
+        "Publishing Industries (except Internet)",
+        "Pulp Mills",
+        "Pulp, Paper, and Paperboard Mills",
+        "Pump and Pumping Equipment Manufacturing",
+        "Quick Printing",
+        "Racetracks",
+        "Radio and Television Broadcasting and Wireless Communications Equipment Manufacturing",
+        "Radio, Television, and Other Electronics Stores",
+        "Ready-Mix Concrete Manufacturing",
+        "Reconstituted Wood Product Manufacturing",
+        "Recyclable Material Merchant Wholesalers",
+        "Refrigerated Warehousing and Storage",
+        "Regulation and Administration of Transportation Programs",
+        "Regulation, Licensing, and Inspection of Miscellaneous Commercial Sectors",
+        "Relay and Industrial Control Manufacturing",
+        "Religious Organizations",
+        "Remediation Services",
+        "Rendering and Meat Byproduct Processing",
+        "Research and Development in Biotechnology",
+        "Research and Development in the Physical, Engineering, and Life Sciences (except Biotechnology)",
+        "Research and Development in the Social Sciences and Humanities",
+        "Residential Remodelers",
+        "Retail Bakeries",
+        "Reupholstery and Furniture Repair",
+        "Roasted Nuts and Peanut Butter Manufacturing",
+        "Rolled Steel Shape Manufacturing",
+        "Roofing Contractors",
+        "Roofing, Siding, and Insulation Material Merchant Wholesalers",
+        "Rope, Cordage, and Twine Mills",
+        "Rubber Product Manufacturing for Mechanical Use",
+        "Rubber and Plastics Hoses and Belting Manufacturing",
+        "Sanitary Paper Product Manufacturing",
+        "Sawmill and Woodworking Machinery Manufacturing",
+        "Sawmills",
+        "Sawmills and Wood Preservaton",
+        "Scale and Balance Manufacturing",
+        "Scenic and Sightseeing Transportation, Land",
+        "Scenic and Sightseeing Transportation, Water",
+        "Scheduled Freight Air Transportation",
+        "Scheduled Passenger Air Transportation",
+        "School and Employee Bus Transportation",
+        "Seafood Canning",
+        "Search, Detection, Navigation, Guidance, Aeronautical, and Nautical System and Instrument Manufacturing",
+        "Secondary Smelting and Alloying of Aluminum",
+        "Secondary Smelting, Refining, and Alloying of Copper",
+        "Secondary Smelting, Refining, and Alloying of Nonferrous Metal (except Copper and Aluminum)",
+        "Security Guards and Patrol Services",
+        "Semiconductor and Other Electronic Component Manufacturing",
+        "Service Establishment Equipment and Supplies Merchant Wholesalers",
+        "Setup Paperboard Box Manufacturing",
+        "Sewage Treatment Facilities",
+        "Sheet Metal Work Manufacturing",
+        "Ship Building and Repairing",
+        "Showcase, Partition, Shelving, and Locker Manufacturing",
+        "Sign Manufacturing",
+        "Site Preparation Contractors",
+        "Skiing Facilities",
+        "Small Arms Manufacturing",
+        "Snack and Nonalcoholic Beverage Bars",
+        "Soap and Other Detergent Manufacturing",
+        "Soft Drink Manufacturing",
+        "Soft Drink and Ice Manufacturing",
+        "Software Publishers",
+        "Softwood Veneer and Plywood Manufacturing",
+        "Solid Waste Collection",
+        "Solid Waste Combustors and Incinerators",
+        "Solid Waste Landfill",
+        "Soybean Processing",
+        "Special Die and Tool, Die Set, Jig, and Fixture Manufacturing",
+        "Specialized Freight (except Used Goods) Trucking, Long-Distance",
+        "Specialty (except Psychiatric and Substance Abuse) Hospitals",
+        "Specialty Canning",
+        "Speed Changer, Industrial High-Speed Drive, and Gear Manufacturing",
+        "Spice and Extract Manufacturing",
+        "Sporting Goods Stores",
+        "Sporting and Athletic Goods Manufacturing",
+        "Sports and Recreation Instruction",
+        "Spring (Heavy Gauge) Manufacturing",
+        "Spring (Light Gauge) Manufacturing",
+        "Starch and Vegetable Fats and Oils Manufacturing",
+        "Stationery and Office Supplies Merchant Wholesalers",
+        "Stationery, Tablet, and Related Product Manufacturing",
+        "Steel Foundries (except Investment)",
+        "Steel Investment Foundries",
+        "Storage Battery Manufacturing",
+        "Structural Steel and Precast Concrete Contractors",
+        "Supermarkets and Other Grocery (except Convenience) Stores",
+        "Support Activities for Forestry",
+        "Support Activities for Nonmetallic Minerals (except Fuels) Mining",
+        "Support Activities for Oil and Gas Operations",
+        "Support Activities for Rail Transportation",
+        "Surface-Coated Paperboard Manufacturing",
+        "Surgical Appliance and Supplies Manufacturing",
+        "Surgical and Medical Instrument Manufacturing",
+        "Surveying and Mapping (except Geophysical) Services",
+        "Switchgear and Switchboard Apparatus Manufacturing",
+        "Synthetic Organic Dye and Pigment Manufacturing",
+        "Telecommunications Resellers",
+        "Telephone Apparatus Manufacturing",
+        "Temporary Help Services",
+        "Testing Laboratories",
+        "Textile Bag Mills",
+        "Textile and Fabric Finishing and Fabric Coating Mills",
+        "Tile and Terrazzo Contractors",
+        "Timber Tract Operations",
+        "Tire Dealers",
+        "Tire Manufacturing (except Retreading)",
+        "Tire and Tube Merchant Wholesalers",
+        "Toilet Preparation Manufacturing",
+        "Totalizing Fluid Meter and Counting Device Manufacturing",
+        "Toy and Hobby Goods and Supplies Merchant Wholesalers",
+        "Tradebinding and Related Work",
+        "Travel Trailer and Camper Manufacturing",
+        "Truck Trailer Manufacturing",
+        "Truck, Utility Trailer, and RV (Recreational Vehicle) Rental and Leasing",
+        "Truss Manufacturing",
+        "Turbine and Turbine Generator Set Units Manufacturing",
+        "Turkey Production",
+        "Unlaminated Plastics Film and Sheet (except Packaging) Manufacturing",
+        "Unlaminated Plastics Profile Shape Manufacturing",
+        "Upholstered Household Furniture Manufacturing",
+        "Urethane and Other Foam Product (except Polystyrene) Manufacturing",
+        "Used Household and Office Goods Moving",
+        "Utilities",
+        "Vehicular Lighting Equipment Manufacturing",
+        "Veterinary Services",
+        "Video Tape and Disc Rental",
+        "Vitreous China Plumbing Fixture and China and Earthenware Bathroom Accessories Manufacturing",
+        "Vocational Rehabilitation Services",
+        "Warm Air Heating and Air-Conditioning Equipment and Supplies Merchant Wholesalers",
+        "Waste Treatment and Disposal",
+        "Watch, Clock, and Part Manufacturing",
+        "Water Supply and Irrigation Systems",
+        "Water and Sewer Line and Related Structures Construction",
+        "Water, Sewage and Other Systems",
+        "Welding and Soldering Equipment Manufacturing",
+        "Wet Corn Milling",
+        "Wholesale Trade",
+        "Wholesale Trade Agents and Brokers",
+        "Wineries",
+        "Women's Clothing Stores",
+        "Wood Container and Pallet Manufacturing",
+        "Wood Kitchen Cabinet and Countertop Manufacturing",
+        "Wood Office Furniture Manufacturing",
+        "Wood Preservation",
+        "Wood Television, Radio, and Sewing Machine Cabinet Manufacturing",
+        "Wood Window and Door Manufacturing",
+        "Yarn Spinning Mills"
+      ];
+      const searchField = document.getElementById('industrySearch');
+      const listContainer = document.getElementById('industryList');
+      searchField.addEventListener('input', function() {
+        const searchValue = searchField.value.toLowerCase();
+        listContainer.innerHTML = ''; // Clear current list
+        const filteredOptions = industryOptions.filter(option =>
+          option.toLowerCase().includes(searchValue)
+        );
+        // Populate list with filtered options
+        filteredOptions.forEach(option => {
+          const div = document.createElement('div');
+          div.textContent = option;
+          div.addEventListener('click', function() {
+            searchField.value = option; // Update search field with selected option
+            listContainer.style.display = 'none'; // Hide list after selection
+          });
+          listContainer.appendChild(div);
+        });
+        listContainer.style.display = 'block'; // Show list with filtered options
+      });
+      // Hide list when not focused
+      searchField.addEventListener('blur', function() {
+        setTimeout(() => { // Timeout to allow click event to register before hiding
+          listContainer.style.display = 'none';
+        }, 200);
+      });
+      // Optional: Re-show list on focus if it has content
+      searchField.addEventListener('focus', function() {
+        if (searchField.value) {
+          listContainer.style.display = 'block';
+        }
+      });
+    });
   </script>
 </body>
 
