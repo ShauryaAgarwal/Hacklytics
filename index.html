@@ -202,7 +202,16 @@
           <option value="">Select</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <!-- Military -->
+      <div class="question">
+        <label for="military">Military Service:</label>
+        <select id="military" name="military" required>
+          <option value="">Select</option>
+          <option value="Yes">I have served</option>
+          <option value="Female">I have never served</option>
         </select>
       </div>
 
@@ -427,12 +436,16 @@
       
       // Collect form data
       const formData = new FormData(event.target);
-      const responses = {};
-      for (const [key, value] of formData.entries()) {
-        responses[key] = value;
-      }
+      const responses = {
+        age: formData.get('age'),
+        gender: formData.get('gender') === 'Male' ? 1 : 2, // Assuming 1 for Male, 2 for Female
+        military: formData.get('military') === 'Yes' ? 1 : 0, // Assuming 1 for Yes, 0 for No
+        industry: formData.get('industrySearch'), // Directly use the search input for industry
+        q1: parseInt(formData.get('hearingRating'), 10),
+        q2: formData.get('workNoiseExposure') === 'Yes' ? 1 : 0, // Assuming 1 for Yes, 0 for No
+        q3: formData.get('botheringSymptoms') === 'Yes' ? 1 : 0 // Assuming 1 for Yes, 0 for No
+      };
 
-      /*
       // Sort age into groups
       const age = parseInt(responses.age, 10); // Ensure age is an integer
       let ageGroup = '';
@@ -442,7 +455,6 @@
       else if (age <= 55) ageGroup = 'Group 4: 46-55';
       else ageGroup = 'Group 5: 56+';
       responses.ageGroup = ageGroup; // Add the age group to the responses object
-      */
 
       /*
       // Evaluate responses to determine result
@@ -462,7 +474,15 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(responses),
+          body: JSON.stringify({
+            ageGroup: responses.ageGroup,
+            gender: responses.gender,
+            industry: responses.industry,
+            militaryStatus: responses.military,
+            q1: responses.q1,
+            q2: responses.q2,
+            q3: responses.q3
+          }),
         });
         const data = await response.json();
         displayResults(data.audiogramImageUrl);
@@ -493,6 +513,7 @@
       displayRecommendation(recommendation);
     });
 
+    /*
     function evaluateResponses(responses) {
       // Custom logic to evaluate responses and determine hearing loss risk
       if (responses['hearingRating'] >= 4) {
@@ -502,6 +523,7 @@
       }
       return 'Hearing within normal range. Maintain regular hearing health checks.';
     }
+    */
 
     function displayLoadingScreen(show) {
       const loadingScreen = document.getElementById('loadingScreen');
