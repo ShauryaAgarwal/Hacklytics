@@ -470,27 +470,17 @@
 
       try {
         const response = await fetch('/api/generate_audiogram', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ageGroup: responses.ageGroup,
-            gender: responses.gender,
-            industry: responses.industry,
-            militaryStatus: responses.military,
-            q1: responses.q1,
-            q2: responses.q2,
-            q3: responses.q3
-          }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(responses),
         });
         const data = await response.json();
         displayResults(data.audiogramImageUrl);
-      } catch (error) {
+    } catch (error) {
         console.error('Error:', error);
-      } finally {
-        displayLoadingScreen(false);
-      }
+    }
     });
     // Hearing aid questionnaire listener
     document.getElementById('hearingAidQuestionnaire').addEventListener('submit', function(event) {
