@@ -126,6 +126,22 @@
       color: #666;
     }
 
+    .recommendationResult {
+      background-color: #e2e8f0;
+      padding: 20px;
+      margin-top: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .recommendationResult h2 {
+      color: #333;
+    }
+
+    .recommendationResult p {
+      color: #666;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .container {
@@ -156,6 +172,17 @@
       <div class="question">
         <label for="age">Age:</label>
         <input type="number" id="age" name="age" min="0" required>
+      </div>
+
+      <!-- Gender -->
+      <div class="question">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
 
       <!-- Industry -->
@@ -307,6 +334,79 @@
       <h2>Results</h2>
       <p id="resultText"></p>
     </div>
+
+    <h1>OTC Hearing Aid Recommendation Questionnaire</h1>
+    <form id="hearingAidQuestionnaire">
+      <!-- 1. Primary Environment -->
+      <div class="question">
+        <label for="primaryEnvironment">In which type of environment do you find yourself most often needing hearing assistance?</label>
+        <select id="primaryEnvironment" name="primaryEnvironment" required>
+          <option value="">Select</option>
+          <option value="quiet">Quiet settings (e.g., home)</option>
+          <option value="social">Social settings (e.g., restaurants, gatherings)</option>
+          <option value="outdoor">Outdoor or work-related noisy settings</option>
+        </select>
+      </div>
+
+      <!-- 2. Tech Preferences -->
+      <div class="question">
+        <label for="techPreference">What technological feature is a must-have for your hearing aid?</label>
+        <select id="techPreference" name="techPreference" required>
+          <option value="">Select</option>
+          <option value="Bluetooth">Bluetooth connectivity for phone calls/music</option>
+          <option value="Rechargeable batteries">Rechargeable batteries</option>
+          <option value="Customizable settings">Customizable settings through an app</option>
+        </select>
+      </div>
+
+      <!-- 3. Technology Compatibility -->
+      <div class="question">
+        <label for="techCompatibility">Which of these devices do you use regularly and wish to connect with your hearing aid?</label>
+        <select id="techCompatibility" name="techCompatibility" required>
+          <option value="">Select</option>
+          <option value="iPhone/iOS devices">iPhone/iOS devices</option>
+          <option value="Android devices">Android devices</option>
+          <option value="Neither">Neither</option>
+        </select>
+      </div>
+
+      <!-- 4. Physical Comfort -->
+      <div class="question">
+        <label for="comfortPreference">What is your preference for wearing style?</label>
+        <select id="comfortPreference" name="comfortPreference" required>
+          <option value="">Select</option>
+          <option value="ITE">In-the-ear (ITE) for discretion</option>
+          <option value="BTE">Behind-the-ear (BTE) for power and battery life</option>
+          <option value="Open to suggestions">Open to suggestions based on my needs</option>
+        </select>
+      </div>
+
+      <!-- 5. Budget Consideration -->
+      <div class="question">
+        <label for="budget">What is your budget for a hearing aid?</label>
+        <select id="budget" name="budget" required>
+          <option value="">Select</option>
+          <option value="Below $500">Below $500</option>
+          <option value="$500 to $1000">$500 to $1000</option>
+          <option value="Above $1000">Above $1000</option>
+        </select>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="button">Submit</button>
+    </form>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen" hidden>
+      <div class="loader"></div>
+      Processing your results, please wait...
+    </div>
+
+    <!-- Recommendation Display -->
+    <div id="recommendationResult" class="recommendationResult" hidden>
+      <h2>Results</h2>
+      <p id="recommendationText"></p>
+    </div>
   </div>
 
   <script>
@@ -319,7 +419,7 @@
       for (const [key, value] of formData.entries()) {
         responses[key] = value;
       }
-      // Evaluate responses to determine result (this is a simplified example)
+      // Evaluate responses to determine result
       let resultMessage = evaluateResponses(responses);
       // Simulate fetch request for demonstration
       setTimeout(() => {
@@ -327,6 +427,30 @@
         displayResults({
           result: resultMessage
         });
+      }, 2000); // Simulated delay
+    });
+    document.getElementById('hearingAidQuestionnaire').addEventListener('submit', function(event) {
+      event.preventDefault();
+      displayLoadingScreen(true);
+      // Collect form data
+      const formData = new FormData(event.target);
+      const environment = formData.get('primaryEnvironment');
+      const techPreference = formData.get('techPreference');
+      const techCompatibility = formData.get('techCompatibility');
+      const comfortPreference = formData.get('comfortPreference');
+      const budget = formData.get('budget');
+      // Evaluate responses to determine recommendation
+      const recommendation = generateRecommendation({
+        environment,
+        techPreference,
+        techCompatibility,
+        comfortPreference,
+        budget
+      });
+      // Simulate fetch request for demonstration
+      setTimeout(() => {
+        // Display results after simulated data retrieval
+        displayRecommendation(recommendation);
       }, 2000); // Simulated delay
     });
 
@@ -347,15 +471,97 @@
 
     function displayResults(data) {
       displayLoadingScreen(false);
-      /*
-      const resultsDisplay = document.getElementById('resultsDisplay');
-      resultsDisplay.innerHTML = `<strong>Result:</strong> ${data.result}`;
-      resultsDisplay.style.display = 'block';
-      */
       const resultsDisplay = document.getElementById('resultsDisplay');
       const resultText = document.getElementById('resultText');
       resultText.innerHTML = data.result;
       resultsDisplay.hidden = false;
+    }
+
+    function displayRecommendation(recommendation) {
+      displayLoadingScreen(false);
+      const recommendationDisplay = document.getElementById('recommendationResult');
+      const recommendationText = document.getElementById('recommendationText');
+      recommendationText.innerHTML = recommendation;
+      recommendationDisplay.hidden = false;
+    }
+
+    function generateRecommendation(responses) {
+      // Simplified attributes for each model based on potential user preferences
+      const models = {
+        "Sony CRE-E10": {
+          price: 1300,
+          type: "Earbud",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Sennheiser ADC": {
+          price: 1500,
+          type: "RIC",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Jabra Enhance Plus": {
+          price: 799,
+          type: "Earbud",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Lexie by Bose B2": {
+          price: 999,
+          type: "RIC",
+          techCompatibility: ["iPhone/iOS devices"]
+        },
+        "Lucid Engage": {
+          price: 1000,
+          type: "RIC",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "HP Hearing PRO": {
+          price: 699,
+          type: "Earbud",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Eargo 7": {
+          price: 2950,
+          type: "CIC",
+          techCompatibility: ["iPhone/iOS devices"]
+        },
+        "Sound World HD75R": {
+          price: 500,
+          type: "BTE",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Soundwave Sontro": {
+          price: 749,
+          type: "RIC",
+          techCompatibility: ["iPhone/iOS devices", "Android devices"]
+        },
+        "Go Prime": {
+          price: 299,
+          type: "ITC",
+          techCompatibility: ["Neither"]
+        },
+      };
+      // Evaluate responses and match to models
+      let bestMatch = null;
+      let maxScore = 0;
+      Object.entries(models).forEach(([model, attributes]) => {
+        let score = 0;
+        // Price scoring
+        if (responses.budget === "Below $500" && attributes.price < 500) score += 2;
+        else if (responses.budget === "$500 to $1000" && (attributes.price >= 500 && attributes.price <= 1000)) score += 2;
+        else if (responses.budget === "Above $1000" && attributes.price > 1000) score += 2;
+        // Tech Compatibility scoring
+        if (attributes.techCompatibility.includes(responses.techCompatibility)) score += 2;
+        // Type preference scoring
+        if ((responses.comfortPreference === "ITE" && attributes.type === "Earbud") ||
+          (responses.comfortPreference === "BTE" && attributes.type === "BTE") ||
+          (responses.comfortPreference === "Open to suggestions" && score > 0)) score += 1;
+        if (score > maxScore) {
+          maxScore = score;
+          bestMatch = model;
+        }
+      });
+      // Generate a recommendation message
+      let recommendationReasons = `Based on your preferences for budget, technology compatibility, and physical comfort, we recommend the ${bestMatch}.`;
+      return recommendationReasons;
     }
   </script>
 </body>
