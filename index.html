@@ -202,16 +202,7 @@
           <option value="">Select</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-        </select>
-      </div>
-
-      <!-- Military -->
-      <div class="question">
-        <label for="military">Military Service:</label>
-        <select id="military" name="military" required>
-          <option value="">Select</option>
-          <option value="Yes">I have served</option>
-          <option value="Female">I have never served</option>
+          <option value="Other">Other</option>
         </select>
       </div>
 
@@ -502,7 +493,6 @@
       displayRecommendation(recommendation);
     });
 
-    /*
     function evaluateResponses(responses) {
       // Custom logic to evaluate responses and determine hearing loss risk
       if (responses['hearingRating'] >= 4) {
@@ -512,7 +502,6 @@
       }
       return 'Hearing within normal range. Maintain regular hearing health checks.';
     }
-    */
 
     function displayLoadingScreen(show) {
       const loadingScreen = document.getElementById('loadingScreen');
