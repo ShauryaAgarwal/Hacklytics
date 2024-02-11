@@ -484,7 +484,19 @@
             q3: responses.q3
           }),
         });
+
+        console.log(responses.ageGroup);
+        console.log(responses.gender);
+        console.log(responses.industry);
+        console.log(responses.military);
+        console.log(responses.q1);
+        console.log(responses.q2);
+        console.log(responses.q3);
+        
         const data = await response.json();
+
+        console.log(data);
+        
         displayResults(data.audiogramImageUrl);
       } catch (error) {
         console.error('Error:', error);
