@@ -11,7 +11,7 @@ class handler(BaseHTTPRequestHandler):
         # Process data here to generate audiogram
 
         # Placeholder image URL
-        image_url = "https://via.placeholder.com/150"
+        image_url = "https://placekitten.com/200/300"
 
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
