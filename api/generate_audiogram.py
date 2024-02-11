@@ -46,90 +46,90 @@ class handler(BaseHTTPRequestHandler):
         
         
         
-        def generateAudiogram (ageGroupUser, genderUser, industryUser, militaryStatus, q1, q2, q3, df):
-            L500 = np.array(df['L500'])
-            L1k = np.array(df['L1k'])
-            L2k = np.array(df['L2k'])
-            L3k = np.array(df['L3k'])
-            L4k = np.array(df['L4k'])
-            L6k = np.array(df['L6k'])
-            L8k = np.array(df['L8k'])
-            R500 = np.array(df['R500'])
-            R1k = np.array(df['R1k'])
-            R3k = np.array(df['R3k'])
-            R2k = np.array(df['R2k'])
-            R4k = np.array(df['R4k'])
-            R6k = np.array(df['R6k'])
-            R8k = np.array(df['R8k'])
-            gender = np.array(df['Gender'])
-            ageGroup = np.array(df['AgeGroup'])
-            industry = np.array(df['Industry'])
-            if industryUser in industryMapping:
-                industryUser = industryMapping[industryUser]
-            data_specific = df[(df['Industry'] == industryUser) & (df['AgeGroup'] == ageGroupUser) & (df['Gender'] == genderUser)]
-        
-            frequency_columns = ['L8k', 'L6k', 'L4k', 'L3k', 'L2k', 'L1k', 'L500', 'R500', 'R1k', 'R2k', 'R3k', 'R4k', 'R6k', 'R8k']
-            hearing_avg = data_specific[frequency_columns].mean().reset_index()
-        
-            L2k = hearing_avg.loc[hearing_avg['index'] == 'L2k'].values[0][1]
-            L4k = hearing_avg.loc[hearing_avg['index'] == 'L4k'].values[0][1]
-            R2k = hearing_avg.loc[hearing_avg['index'] == 'R2k'].values[0][1]
-            R4k = hearing_avg.loc[hearing_avg['index'] == 'R4k'].values[0][1]
-        
-            new_data = np.array([L2k, L4k, q1, q2, q3, genderUser, ageGroupUser, militaryStatus])
-            new_data_scaled = scalerLeft.transform(new_data.reshape(1, -1))  # Reshaping to 2D array
-            predictions = leftModel.predict(new_data_scaled)
-            predictions = scalerYLeft.inverse_transform(predictions)
-            L500, L1000, L3000, L6000, L8000 = predictions.flatten()
-            values = {
-                "500": L500,
-                "1K": L1000,
-                "2K": L2k,
-                "3K": L3000,
-                "4K": L4k,
-                "6K": L6000,
-                "8K": L8000,
-            }
-            frequencies = list(values.keys())
-            db_levels = list(values.values())
-            plt.figure(figsize=(15, 8))
-            plt.plot(frequencies, db_levels, marker='o', color='red', label='Left')
-            plt.title('DNN 2k and 4k')
-            plt.xlabel('Frequency')
-            plt.ylabel('Average dB Level')
-            plt.grid(True)
-            plt.ylim(100, 0)
-        
-            new_data = np.array([R2k, R4k, q1, q2, q3, genderUser, ageGroupUser, militaryStatus])
-            new_data_scaled = scalerRight.transform(new_data.reshape(1, -1))  # Reshaping to 2D array
-            predictions = rightModel.predict(new_data_scaled)
-            predictions = scalerYRight.inverse_transform(predictions)
-            R500, R1000, R3000, R6000, R8000 = predictions.flatten()
-            values = {
-                "500": R500,
-                "1K": R1000,
-                "2K": R2k,
-                "3K": R3000,
-                "4K": R4k,
-                "6K": R6000,
-                "8K": R8000,
-            }
-            frequencies = list(values.keys())
-            db_levels = list(values.values())
-            plt.plot(frequencies, db_levels, marker='o', color='blue', label='Right')
-            plt.title('Personalized Audiogram')
-            plt.xlabel('Frequency')
-            plt.ylabel('Average dB Level')
-            plt.ylim(100, 0)
-            plt.grid()
-            plt.legend()
-            buf = BytesIO()
-            plt.savefig(buf, format='png')
-            buf.seek(0)
-            img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-            img_url = f"data:image/png;base64,{img_base64}"
-        
-            return img_url  # Return a data URL for the generated image
-        
-        generateAudiogram(4, 1, 'Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)', 2, 5, 1, 1, df)
+def generateAudiogram (ageGroupUser, genderUser, industryUser, militaryStatus, q1, q2, q3, df):
+    L500 = np.array(df['L500'])
+    L1k = np.array(df['L1k'])
+    L2k = np.array(df['L2k'])
+    L3k = np.array(df['L3k'])
+    L4k = np.array(df['L4k'])
+    L6k = np.array(df['L6k'])
+    L8k = np.array(df['L8k'])
+    R500 = np.array(df['R500'])
+    R1k = np.array(df['R1k'])
+    R3k = np.array(df['R3k'])
+    R2k = np.array(df['R2k'])
+    R4k = np.array(df['R4k'])
+    R6k = np.array(df['R6k'])
+    R8k = np.array(df['R8k'])
+    gender = np.array(df['Gender'])
+    ageGroup = np.array(df['AgeGroup'])
+    industry = np.array(df['Industry'])
+    if industryUser in industryMapping:
+        industryUser = industryMapping[industryUser]
+    data_specific = df[(df['Industry'] == industryUser) & (df['AgeGroup'] == ageGroupUser) & (df['Gender'] == genderUser)]
+
+    frequency_columns = ['L8k', 'L6k', 'L4k', 'L3k', 'L2k', 'L1k', 'L500', 'R500', 'R1k', 'R2k', 'R3k', 'R4k', 'R6k', 'R8k']
+    hearing_avg = data_specific[frequency_columns].mean().reset_index()
+
+    L2k = hearing_avg.loc[hearing_avg['index'] == 'L2k'].values[0][1]
+    L4k = hearing_avg.loc[hearing_avg['index'] == 'L4k'].values[0][1]
+    R2k = hearing_avg.loc[hearing_avg['index'] == 'R2k'].values[0][1]
+    R4k = hearing_avg.loc[hearing_avg['index'] == 'R4k'].values[0][1]
+
+    new_data = np.array([L2k, L4k, q1, q2, q3, genderUser, ageGroupUser, militaryStatus])
+    new_data_scaled = scalerLeft.transform(new_data.reshape(1, -1))  # Reshaping to 2D array
+    predictions = leftModel.predict(new_data_scaled)
+    predictions = scalerYLeft.inverse_transform(predictions)
+    L500, L1000, L3000, L6000, L8000 = predictions.flatten()
+    values = {
+        "500": L500,
+        "1K": L1000,
+        "2K": L2k,
+        "3K": L3000,
+        "4K": L4k,
+        "6K": L6000,
+        "8K": L8000,
+    }
+    frequencies = list(values.keys())
+    db_levels = list(values.values())
+    plt.figure(figsize=(15, 8))
+    plt.plot(frequencies, db_levels, marker='o', color='red', label='Left')
+    plt.title('DNN 2k and 4k')
+    plt.xlabel('Frequency')
+    plt.ylabel('Average dB Level')
+    plt.grid(True)
+    plt.ylim(100, 0)
+
+    new_data = np.array([R2k, R4k, q1, q2, q3, genderUser, ageGroupUser, militaryStatus])
+    new_data_scaled = scalerRight.transform(new_data.reshape(1, -1))  # Reshaping to 2D array
+    predictions = rightModel.predict(new_data_scaled)
+    predictions = scalerYRight.inverse_transform(predictions)
+    R500, R1000, R3000, R6000, R8000 = predictions.flatten()
+    values = {
+        "500": R500,
+        "1K": R1000,
+        "2K": R2k,
+        "3K": R3000,
+        "4K": R4k,
+        "6K": R6000,
+        "8K": R8000,
+    }
+    frequencies = list(values.keys())
+    db_levels = list(values.values())
+    plt.plot(frequencies, db_levels, marker='o', color='blue', label='Right')
+    plt.title('Personalized Audiogram')
+    plt.xlabel('Frequency')
+    plt.ylabel('Average dB Level')
+    plt.ylim(100, 0)
+    plt.grid()
+    plt.legend()
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    img_url = f"data:image/png;base64,{img_base64}"
+
+    return img_url  # Return a data URL for the generated image
+
+generateAudiogram(4, 1, 'Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)', 2, 5, 1, 1, df)
 
