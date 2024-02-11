@@ -133,4 +133,4 @@ def generateAudiogram (ageGroupUser, genderUser, industryUser, militaryStatus, q
 
     return img_url  # Return a data URL for the generated image
 
-generateAudiogram(4, 1, 'Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)', 2, 5, 1, 1, df)
+generateAudiogram(4, 1, 'Administration of Human Resource Programs (except Education, Public Health, and Veterans\' Affairs Programs)', 2, 5, 1, 1, df)
