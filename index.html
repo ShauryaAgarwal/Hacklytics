@@ -440,7 +440,7 @@
         age: formData.get('age'),
         gender: formData.get('gender') === 'Male' ? 1 : 2, // Assuming 1 for Male, 2 for Female
         military: formData.get('military') === 'Yes' ? 1 : 2, // Assuming 1 for Yes, 0 for No
-        industry: formData.get('industryList'), // Directly use the search input for industry
+        industry: document.getElementById('industrySearch').value, // Directly use the search input for industry
         q1: parseInt(formData.get('hearingRating'), 10),
         q2: formData.get('workNoiseExposure') === 'Yes' ? 1 : 2, // Assuming 1 for Yes, 0 for No
         q3: formData.get('botheringSymptoms') === 'Yes' ? 1 : 2 // Assuming 1 for Yes, 0 for No
